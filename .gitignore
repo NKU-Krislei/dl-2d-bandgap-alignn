@@ -1,0 +1,54 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Environment
+.env
+.venv/
+venv/
+/.conda-env/
+/.remote_data_tmp/
+
+# Data (large files, downloaded at runtime)
+data/raw/
+data/*.json.gz
+data/*.tar.gz
+*.csv
+!data/.gitkeep
+
+# Results (intermediate/local)
+results/gpu_connection.json
+results/.mplconfig/
+results/**/cache_*_data/
+results/**/*.mdb
+
+# Secrets & credentials
+*.pem
+id_rsa*
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Model checkpoints (large)
+*.pt
+*.pth
+*.ckpt
+*.bin
+
+# Logs
+*.log

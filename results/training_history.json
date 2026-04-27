@@ -1,0 +1,14 @@
+{
+  "status": "failed",
+  "runner": "train_direct.py",
+  "message": "Self-training was attempted through a direct ALIGNN graphwise training loop. The ALIGNN 2026 CLI skipped graphwise training, DGL 2.1 was CPU-only, and CUDA DGL wheels 2.4.0+cu121 and 2.5.0+cu124 both hung inside the first ALIGNN forward pass with the installed PyTorch 2.8.0+cu128. The project therefore uses the completed RF/Ridge baseline results, with pretrained ALIGNN recorded as unavailable in this run.",
+  "train_loss": [],
+  "val_loss": [],
+  "val_mae": [],
+  "attempts": [
+    "ALIGNN CLI rejected or misrouted graphwise config",
+    "Direct graphwise loop failed with CPU-only DGL when moving graphs to CUDA",
+    "DGL 2.4.0+cu121 installed with --no-deps but hung during first forward pass",
+    "DGL 2.5.0+cu124 installed with --no-deps but also hung during first forward pass"
+  ]
+}

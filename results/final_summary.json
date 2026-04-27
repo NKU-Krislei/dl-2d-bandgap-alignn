@@ -1,0 +1,98 @@
+{
+  "dataset_stats": {
+    "total_materials": 75993,
+    "bandgap_mean": 0.6125566038977275,
+    "bandgap_std": 1.3434800291881905,
+    "bandgap_min": 0.0,
+    "bandgap_max": 18.179,
+    "family_counts": {
+      "Phosphorene": 68507,
+      "h-BN": 7474,
+      "TMD": 12
+    },
+    "splits": {
+      "train": 60794,
+      "val": 7599,
+      "test": 7600
+    },
+    "small_splits": {
+      "train_small": 800,
+      "val_small": 100,
+      "test_small": 100
+    },
+    "n_metal": 53186,
+    "n_semiconductor": 16908,
+    "n_insulator": 5899
+  },
+  "benchmark": {
+    "random_forest": {
+      "method": "Random Forest + Magpie",
+      "MAE_eV": 0.2734564233917052,
+      "RMSE_eV": 0.6110187002566182,
+      "R2": 0.7978371203917557,
+      "top_features": [
+        {
+          "feature": "MagpieData mode MeltingT",
+          "importance": 0.17903683646225996
+        },
+        {
+          "feature": "MagpieData mean NdValence",
+          "importance": 0.16888539010467127
+        },
+        {
+          "feature": "MagpieData mean MeltingT",
+          "importance": 0.03094673759408461
+        },
+        {
+          "feature": "MagpieData mean GSmagmom",
+          "importance": 0.030713000952772167
+        },
+        {
+          "feature": "MagpieData avg_dev Column",
+          "importance": 0.02603356794536506
+        },
+        {
+          "feature": "MagpieData mode MendeleevNumber",
+          "importance": 0.024233022390312976
+        },
+        {
+          "feature": "MagpieData mean MendeleevNumber",
+          "importance": 0.017352515251043938
+        },
+        {
+          "feature": "MagpieData mean Row",
+          "importance": 0.016641399264857974
+        },
+        {
+          "feature": "MagpieData avg_dev NpUnfilled",
+          "importance": 0.016429129864808312
+        },
+        {
+          "feature": "MagpieData range Electronegativity",
+          "importance": 0.016301262541119327
+        }
+      ]
+    },
+    "ridge": {
+      "method": "Ridge + Magpie",
+      "MAE_eV": 0.6894962245983628,
+      "RMSE_eV": 1.0339673998543202,
+      "R2": 0.42109659635343144
+    }
+  },
+  "evaluation": {},
+  "training": {
+    "status": "failed",
+    "runner": "train_direct.py",
+    "message": "Self-training was attempted through a direct ALIGNN graphwise training loop. The ALIGNN 2026 CLI skipped graphwise training, DGL 2.1 was CPU-only, and CUDA DGL wheels 2.4.0+cu121 and 2.5.0+cu124 both hung inside the first ALIGNN forward pass with the installed PyTorch 2.8.0+cu128. The project therefore uses pretrained ALIGNN plus RF/Ridge baselines as the reliability fallback.",
+    "train_loss": [],
+    "val_loss": [],
+    "val_mae": [],
+    "attempts": [
+      "ALIGNN CLI rejected or misrouted graphwise config",
+      "Direct graphwise loop failed with CPU-only DGL when moving graphs to CUDA",
+      "DGL 2.4.0+cu121 installed with --no-deps but hung during first forward pass",
+      "DGL 2.5.0+cu124 installed with --no-deps but also hung during first forward pass"
+    ]
+  }
+}

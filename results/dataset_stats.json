@@ -1,0 +1,25 @@
+{
+  "total_materials": 75993,
+  "bandgap_mean": 0.6125566038977275,
+  "bandgap_std": 1.3434800291881905,
+  "bandgap_min": 0.0,
+  "bandgap_max": 18.179,
+  "family_counts": {
+    "Phosphorene": 68507,
+    "h-BN": 7474,
+    "TMD": 12
+  },
+  "splits": {
+    "train": 60794,
+    "val": 7599,
+    "test": 7600
+  },
+  "small_splits": {
+    "train_small": 800,
+    "val_small": 100,
+    "test_small": 100
+  },
+  "n_metal": 53186,
+  "n_semiconductor": 16908,
+  "n_insulator": 5899
+}

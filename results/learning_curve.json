@@ -1,0 +1,22 @@
+[
+  {
+    "train_size": 100,
+    "random_forest_mae_eV": 0.6704115416666666,
+    "ridge_mae_eV": 1.2911257205126176
+  },
+  {
+    "train_size": 500,
+    "random_forest_mae_eV": 0.5402469023761498,
+    "ridge_mae_eV": 0.7258585345458993
+  },
+  {
+    "train_size": 1000,
+    "random_forest_mae_eV": 0.5056628915455942,
+    "ridge_mae_eV": 0.6906372497061207
+  },
+  {
+    "train_size": 2500,
+    "random_forest_mae_eV": 0.47001974584628387,
+    "ridge_mae_eV": 0.6871070931790735
+  }
+]

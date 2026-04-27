@@ -1,0 +1,59 @@
+{
+  "alignn_pretrained": null,
+  "random_forest": {
+    "MAE_eV": 0.2734564233917052,
+    "RMSE_eV": 0.6110187002566182,
+    "R2": 0.7978371203917557
+  },
+  "ridge": {
+    "MAE_eV": 0.6894962245983628,
+    "RMSE_eV": 1.0339673998543202,
+    "R2": 0.42109659635343144
+  },
+  "alignn_self_trained": null,
+  "per_family": [
+    {
+      "family": "Phosphorene",
+      "count": 6854,
+      "alignn_pretrained_MAE_eV": null,
+      "random_forest_MAE_eV": 0.277567650901327,
+      "ridge_MAE_eV": 0.6932535259230233
+    },
+    {
+      "family": "h-BN",
+      "count": 743,
+      "alignn_pretrained_MAE_eV": null,
+      "random_forest_MAE_eV": 0.2363708035004554,
+      "ridge_MAE_eV": 0.6568165925338081
+    },
+    {
+      "family": "TMD",
+      "count": 3,
+      "alignn_pretrained_MAE_eV": null,
+      "random_forest_MAE_eV": 0.06554383280857735,
+      "ridge_MAE_eV": 0.19897067284554681
+    }
+  ],
+  "learning_curve": [
+    {
+      "train_size": 100,
+      "random_forest_mae_eV": 0.6704115416666666,
+      "ridge_mae_eV": 1.2911257205126176
+    },
+    {
+      "train_size": 500,
+      "random_forest_mae_eV": 0.5402469023761498,
+      "ridge_mae_eV": 0.7258585345458993
+    },
+    {
+      "train_size": 1000,
+      "random_forest_mae_eV": 0.5056628915455942,
+      "ridge_mae_eV": 0.6906372497061207
+    },
+    {
+      "train_size": 2500,
+      "random_forest_mae_eV": 0.47001974584628387,
+      "ridge_mae_eV": 0.6871070931790735
+    }
+  ]
+}
