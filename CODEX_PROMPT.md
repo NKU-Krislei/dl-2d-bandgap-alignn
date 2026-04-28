@@ -1,4 +1,12 @@
-# Codex Task Prompt: INFO5000 Project v1 Execution
+# ⚠️ DEPRECATED — DO NOT USE THIS FILE
+
+> **This is the original project setup prompt. It has been superseded.**
+> **Use `CODEX_PROMPT_V100_TRAINING.md` for the current task.**
+> The project is already set up. Do not re-run Phase 0/1 setup from this file.
+
+---
+
+# Codex Task Prompt: INFO5000 Project v1 Execution (ARCHIVED)
 
 > **How to use this prompt:**
 > 1. `cd` into the `dl_2d_bandgap/` directory

@@ -4,8 +4,6 @@
 
 ---
 
-**Student**: Xiaoyu Wang (王小雨)  
-**Program**: PhD in Advanced Materials, HKUST(GZ)  
 **Course**: INFO5000 — Introduction to Data Science  
 **Date**: April 26, 2026  
 **Version**: 1.0  

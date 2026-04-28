@@ -47,33 +47,35 @@ dl_2d_bandgap/
 ### Remote (GPU) — Primary Workflow
 - **Do NOT install PyTorch locally** — the remote GPU instance already has PyTorch via its AutoDL image
 - All computation (data processing, training, evaluation) goes to the remote GPU
-- Read SSH credentials from `results/gpu_connection.json`
-- Upload project, run training, download results
+- **Current SSH credentials are in `results/gpu_connection.json`** (updated on each new instance)
+- Upload project to `/autodl-tmp/` (data disk), run training, download results
 - **Always shut down** the AutoDL instance after training to avoid unnecessary charges
 
-### SSH Connection (read from results/gpu_connection.json)
+### Current SSH Connection (V100-32GB, CUDA 12.4)
 ```json
 {
-  "host": "connect.cqa1.seetacloud.com",
-  "port": 48992,
+  "host": "region-46.seetacloud.com",
+  "port": 37139,
   "user": "root",
-  "gpu": "RTX PRO 6000 / 96 GB"
+  "gpu": "V100-32GB",
+  "project_path": "/autodl-tmp/dl_2d_bandgap/"
 }
 ```
 
 ```bash
 # Connect
-ssh -p 48992 root@connect.cqa1.seetacloud.com
+ssh -p 37139 -o StrictHostKeyChecking=no root@region-46.seetacloud.com
 
-# Upload project
-rsync -avz --exclude='.git' --exclude='__pycache__' --exclude='.playwright-cli' \
-  -e "ssh -p 48992" dl_2d_bandgap/ root@connect.cqa1.seetacloud.com:/root/dl_2d_bandgap/
+# Upload project (ALWAYS to /autodl-tmp/, NOT /root/)
+rsync -avz --exclude='.git' --exclude='__pycache__' \
+  -e "ssh -p 37139 -o StrictHostKeyChecking=no" \
+  dl_2d_bandgap/ root@region-46.seetacloud.com:/autodl-tmp/dl_2d_bandgap/
 
 # Download results
-rsync -avz -e "ssh -p 48992" \
-  root@connect.cqa1.seetacloud.com:/root/dl_2d_bandgap/results/ results/
-rsync -avz -e "ssh -p 48992" \
-  root@connect.cqa1.seetacloud.com:/root/dl_2d_bandgap/figures/ figures/
+rsync -avz -e "ssh -p 37139 -o StrictHostKeyChecking=no" \
+  root@region-46.seetacloud.com:/autodl-tmp/dl_2d_bandgap/results/ results/
+rsync -avz -e "ssh -p 37139 -o StrictHostKeyChecking=no" \
+  root@region-46.seetacloud.com:/autodl-tmp/dl_2d_bandgap/figures/ figures/
 ```
 
 ## Technology Stack
