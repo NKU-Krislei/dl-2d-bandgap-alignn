@@ -2,16 +2,16 @@
   "status": "running",
   "runner": "train_direct.py",
   "device": "cuda",
-  "epochs": 5,
+  "epochs": 50,
   "batch_size": 64,
   "learning_rate": 0.001,
-  "quick": true,
+  "quick": false,
   "split_sizes": {
-    "train": 800,
-    "val": 100,
-    "test": 100
+    "train": 60794,
+    "val": 7599,
+    "test": 7600
   },
-  "output_dir": "/root/autodl-tmp/dl_2d_bandgap/results/alignn_direct_run/quick",
+  "output_dir": "/root/autodl-tmp/dl_2d_bandgap/results/alignn_direct_run/full",
   "model_config": {
     "name": "alignn",
     "alignn_layers": 4,

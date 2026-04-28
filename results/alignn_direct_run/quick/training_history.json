@@ -1,0 +1,57 @@
+{
+  "status": "completed",
+  "runner": "train_direct.py",
+  "device": "cuda",
+  "epochs": 5,
+  "batch_size": 64,
+  "learning_rate": 0.001,
+  "quick": true,
+  "split_sizes": {
+    "train": 800,
+    "val": 100,
+    "test": 100
+  },
+  "output_dir": "/root/autodl-tmp/dl_2d_bandgap/results/alignn_direct_run/quick",
+  "model_config": {
+    "name": "alignn",
+    "alignn_layers": 4,
+    "gcn_layers": 4,
+    "atom_input_features": 92,
+    "edge_input_features": 80,
+    "triplet_input_features": 40,
+    "embedding_features": 64,
+    "hidden_features": 256,
+    "output_features": 1,
+    "link": "identity",
+    "zero_inflated": false,
+    "classification": false,
+    "num_classes": 2,
+    "extra_features": 0
+  },
+  "train_loss": [
+    1.4653077324231465,
+    1.0641363511482875,
+    0.8075901766618093,
+    0.6416447013616562,
+    0.5601930717627207
+  ],
+  "val_loss": [
+    0.794962465763092,
+    0.6234575510025024,
+    0.5767849683761597,
+    0.5612887144088745,
+    0.5218933820724487
+  ],
+  "val_mae": [
+    0.7949625015608035,
+    0.6234575508278795,
+    0.5767849586845841,
+    0.561288699216675,
+    0.521893389930483
+  ],
+  "best_val_mae": 0.521893389930483,
+  "best_model_path": "/root/autodl-tmp/dl_2d_bandgap/results/best_model.pt",
+  "test_loss": 0.5331296637654305,
+  "test_mae": 0.5331296621263028,
+  "self_trained_predictions": "/root/autodl-tmp/dl_2d_bandgap/results/self_trained_predictions.npz"
+}

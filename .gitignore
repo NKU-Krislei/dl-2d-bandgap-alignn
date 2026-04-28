@@ -52,3 +52,4 @@ Thumbs.db
 
 # Logs
 *.log
+results/training_log.txt
