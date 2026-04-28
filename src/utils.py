@@ -62,7 +62,7 @@ def setup_matplotlib() -> None:
 
     plt.rcParams.update(
         {
-            "font.family": ["DejaVu Sans", "Arial Unicode MS"],
+            "font.family": ["DejaVu Sans"],
             "axes.unicode_minus": False,
             "font.size": 11,
             "figure.dpi": 150,

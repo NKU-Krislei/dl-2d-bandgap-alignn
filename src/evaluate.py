@@ -23,12 +23,13 @@ from utils import (
 
 
 def compute_metrics(y_true: np.ndarray, y_pred: np.ndarray) -> dict[str, float]:
-    from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
-
+    residuals = y_pred - y_true
+    ss_res = float(np.sum(residuals**2))
+    ss_tot = float(np.sum((y_true - np.mean(y_true)) ** 2))
     return {
-        "MAE_eV": float(mean_absolute_error(y_true, y_pred)),
-        "RMSE_eV": float(np.sqrt(mean_squared_error(y_true, y_pred))),
-        "R2": float(r2_score(y_true, y_pred)),
+        "MAE_eV": float(np.mean(np.abs(residuals))),
+        "RMSE_eV": float(np.sqrt(np.mean(residuals**2))),
+        "R2": float(1 - ss_res / ss_tot) if ss_tot else 0.0,
     }
 
 
@@ -37,7 +38,16 @@ def load_prediction_frame() -> pd.DataFrame:
     catalog_path = RESULTS_DIR / "material_catalog.csv"
     if not prediction_path.exists() or not catalog_path.exists():
         return pd.DataFrame(
-            columns=["jid", "target", "alignn_pretrained", "random_forest", "ridge", "formula", "family"]
+            columns=[
+                "jid",
+                "target",
+                "alignn_pretrained",
+                "alignn_self_trained",
+                "random_forest",
+                "ridge",
+                "formula",
+                "family",
+            ]
         )
 
     bundle = np.load(prediction_path, allow_pickle=True)
@@ -50,6 +60,19 @@ def load_prediction_frame() -> pd.DataFrame:
             "ridge": bundle["ridge"].astype(float),
         }
     )
+    self_trained_path = RESULTS_DIR / "self_trained_predictions.npz"
+    if self_trained_path.exists():
+        self_trained = np.load(self_trained_path, allow_pickle=True)
+        self_frame = pd.DataFrame(
+            {
+                "jid": self_trained["ids"].astype(str),
+                "alignn_self_trained": self_trained["predictions"].astype(float),
+            }
+        )
+        frame = frame.merge(self_frame, on="jid", how="left")
+    else:
+        frame["alignn_self_trained"] = np.nan
+
     catalog = pd.read_csv(catalog_path)[["jid", "formula", "family"]]
     return frame.merge(catalog, on="jid", how="left")
 
@@ -138,7 +161,12 @@ def plot_training_history() -> bool:
     return True
 
 
-def plot_method_comparison(benchmark: dict[str, dict[str, float]]) -> None:
+def plot_method_comparison(benchmark: dict[str, dict[str, float] | None]) -> None:
+    benchmark = {
+        key: payload
+        for key, payload in benchmark.items()
+        if payload is not None and not np.isnan(payload.get("MAE_eV", np.nan))
+    }
     if not benchmark:
         return
 
@@ -151,7 +179,7 @@ def plot_method_comparison(benchmark: dict[str, dict[str, float]]) -> None:
     r2s = [payload.get("R2", np.nan) for payload in benchmark.values()]
 
     fig, axes = plt.subplots(1, 3, figsize=(15, 5))
-    colors = ["#2563eb", "#10b981", "#7c3aed", "#f59e0b"]
+    colors = ["#2563eb", "#f97316", "#16a34a", "#7c3aed", "#f59e0b"]
 
     for axis, values, ylabel, title in zip(
         axes,
@@ -168,6 +196,9 @@ def plot_method_comparison(benchmark: dict[str, dict[str, float]]) -> None:
             if np.isnan(value):
                 continue
             axis.text(bar.get_x() + bar.get_width() / 2, value, f"{value:.3f}", ha="center", va="bottom", fontsize=9)
+        if values and not np.all(np.isnan(values)):
+            y_max = float(np.nanmax(values))
+            axis.set_ylim(0, y_max * 1.18 if y_max > 0 else 1)
 
     plt.tight_layout()
     plt.savefig(FIGURES_DIR / "method_comparison.png", dpi=150, bbox_inches="tight")
@@ -177,10 +208,14 @@ def plot_method_comparison(benchmark: dict[str, dict[str, float]]) -> None:
 def per_family_evaluation(df: pd.DataFrame) -> list[dict[str, object]]:
     if df.empty or "family" not in df.columns:
         return []
+    metric_columns = ("alignn_self_trained", "alignn_pretrained", "random_forest", "ridge")
     rows = []
     for family, group in df.groupby("family"):
         family_row: dict[str, object] = {"family": family, "count": int(len(group))}
-        for column in ("alignn_pretrained", "random_forest", "ridge"):
+        for column in metric_columns:
+            if column not in group.columns:
+                family_row[f"{column}_MAE_eV"] = None
+                continue
             valid = group[["target", column]].dropna()
             family_row[f"{column}_MAE_eV"] = (
                 float(np.mean(np.abs(valid[column] - valid["target"]))) if not valid.empty else None
@@ -194,17 +229,45 @@ def per_family_evaluation(df: pd.DataFrame) -> list[dict[str, object]]:
         setup_matplotlib()
         import matplotlib.pyplot as plt
 
+        plot_columns = [
+            ("alignn_self_trained_MAE_eV", "ALIGNN (Self-Trained)", "#2563eb"),
+            ("random_forest_MAE_eV", "Random Forest", "#f97316"),
+            ("ridge_MAE_eV", "Ridge", "#16a34a"),
+        ]
+        if top.get("alignn_pretrained_MAE_eV", pd.Series(dtype=float)).notna().any():
+            plot_columns.insert(1, ("alignn_pretrained_MAE_eV", "ALIGNN (Pretrained)", "#7c3aed"))
+        plot_columns = [
+            (column, label, color)
+            for column, label, color in plot_columns
+            if column in top.columns and top[column].notna().any()
+        ]
+        if not plot_columns:
+            return result
+
         positions = np.arange(len(top))
-        width = 0.25
+        width = min(0.8 / len(plot_columns), 0.24)
         fig, ax = plt.subplots(figsize=(12, 6))
-        ax.bar(positions - width, top["alignn_pretrained_MAE_eV"].fillna(np.nan), width, label="ALIGNN (Pretrained)")
-        ax.bar(positions, top["random_forest_MAE_eV"].fillna(np.nan), width, label="Random Forest")
-        ax.bar(positions + width, top["ridge_MAE_eV"].fillna(np.nan), width, label="Ridge")
+        offsets = (np.arange(len(plot_columns)) - (len(plot_columns) - 1) / 2) * width
+        for offset, (column, label, color) in zip(offsets, plot_columns):
+            bars = ax.bar(positions + offset, top[column].fillna(np.nan), width, label=label, color=color)
+            for bar, value in zip(bars, top[column]):
+                if pd.isna(value):
+                    continue
+                ax.text(
+                    bar.get_x() + bar.get_width() / 2,
+                    float(value),
+                    f"{float(value):.3f}",
+                    ha="center",
+                    va="bottom",
+                    fontsize=8,
+                )
         ax.set_xticks(positions)
         ax.set_xticklabels(top["family"], rotation=20, ha="right")
         ax.set_ylabel("MAE (eV)")
         ax.set_title("Per-Family Prediction Error")
         ax.legend()
+        y_max = float(np.nanmax([top[column].to_numpy(dtype=float) for column, _, _ in plot_columns]))
+        ax.set_ylim(0, y_max * 1.18 if y_max > 0 else 1)
         plt.tight_layout()
         plt.savefig(FIGURES_DIR / "per_family_performance.png", dpi=150, bbox_inches="tight")
         plt.close(fig)
@@ -220,7 +283,10 @@ def learning_curve_analysis() -> list[dict[str, object]]:
         from pymatgen.core import Composition
     except Exception as exc:
         print(f"⚠️ Skipping learning curve analysis: {exc}")
-        return []
+        existing = read_json(RESULTS_DIR / "learning_curve.json", default=[]) or []
+        if existing:
+            print("   Keeping existing learning-curve results.")
+        return existing
 
     catalog = pd.read_csv(RESULTS_DIR / "material_catalog.csv").set_index("jid")
     train = pd.read_csv(DATA_DIR / "train_id_prop.csv").rename(columns={"id": "jid"}).join(catalog, on="jid", rsuffix="_meta")
@@ -298,21 +364,23 @@ def run(quick: bool = False, device: str = "cpu") -> dict[str, object]:
     set_random_seeds()
 
     frame = load_prediction_frame()
-    benchmark = read_json(RESULTS_DIR / "pretrain_benchmark.json", default={}) or {}
-
     pretrained_metrics = plot_prediction_panel(frame, "alignn_pretrained", "ALIGNN (Pretrained)", "eval_pretrained.png")
+    self_trained_metrics = plot_prediction_panel(
+        frame, "alignn_self_trained", "ALIGNN (Self-Trained)", "eval_self_trained.png"
+    )
     rf_metrics = plot_prediction_panel(frame, "random_forest", "Random Forest", "eval_random_forest.png")
     ridge_metrics = plot_prediction_panel(frame, "ridge", "Ridge Regression", "eval_ridge.png")
-    self_trained_metrics = None
-    self_trained_bundle = RESULTS_DIR / "self_trained_predictions.npz"
-    if self_trained_bundle.exists():
-        data = np.load(self_trained_bundle, allow_pickle=True)
-        temp = pd.DataFrame({"target": data["targets"], "self_trained": data["predictions"]})
-        metrics = plot_prediction_panel(temp.rename(columns={"self_trained": "prediction"}), "prediction", "ALIGNN (Self-Trained)", "eval_self_trained.png")
-        self_trained_metrics = metrics
 
     plot_training_history()
-    plot_method_comparison(benchmark)
+    plot_method_comparison(
+        {
+            "alignn_self_trained": {"method": "ALIGNN (Self-Trained)", **self_trained_metrics}
+            if self_trained_metrics
+            else None,
+            "random_forest": {"method": "Random Forest + Magpie", **rf_metrics} if rf_metrics else None,
+            "ridge": {"method": "Ridge + Magpie", **ridge_metrics} if ridge_metrics else None,
+        }
+    )
     family_rows = per_family_evaluation(frame)
     curve_rows = learning_curve_analysis()
 

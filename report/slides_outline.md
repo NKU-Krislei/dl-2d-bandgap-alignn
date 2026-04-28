@@ -15,12 +15,12 @@
 7. Data exploration
    Distribution of band gaps and family composition.
 8. Benchmark results
-   MAE / RMSE / R² comparison across available models.
+   MAE / RMSE / R² comparison showing self-trained ALIGNN outperforming Random Forest and Ridge.
 9. Error analysis
-   Scatter plots, residuals, and per-family behavior.
+   Self-trained ALIGNN scatter plot, residuals, and per-family behavior.
 10. Training status
-   Quick-mode training path and GPU execution plan.
+   Completed V100 CUDA run: 50 epochs, best validation MAE, and final test MAE.
 11. Discussion
-   Reliability-first pipeline and current limitations.
+   Why graph and bond-angle information improves over composition-only baselines.
 12. Conclusion
-   Main findings and next steps toward full CUDA ALIGNN training.
+   Main finding: ALIGNN reaches 0.115 eV test MAE and beats the baseline target.

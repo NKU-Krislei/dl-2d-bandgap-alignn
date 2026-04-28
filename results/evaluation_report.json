@@ -11,14 +11,15 @@
     "R2": 0.42109659635343144
   },
   "alignn_self_trained": {
-    "MAE_eV": 0.11497849241897808,
-    "RMSE_eV": 0.38047890829384373,
-    "R2": 0.9216112777360053
+    "MAE_eV": 0.11497849264371161,
+    "RMSE_eV": 0.38047890860467104,
+    "R2": 0.9216112777729852
   },
   "per_family": [
     {
       "family": "Phosphorene",
       "count": 6854,
+      "alignn_self_trained_MAE_eV": 0.11697930023327215,
       "alignn_pretrained_MAE_eV": null,
       "random_forest_MAE_eV": 0.277567650901327,
       "ridge_MAE_eV": 0.6932535259230233
@@ -26,6 +27,7 @@
     {
       "family": "h-BN",
       "count": 743,
+      "alignn_self_trained_MAE_eV": 0.09679786433847082,
       "alignn_pretrained_MAE_eV": null,
       "random_forest_MAE_eV": 0.2363708035004554,
       "ridge_MAE_eV": 0.6568165925338081
@@ -33,6 +35,7 @@
     {
       "family": "TMD",
       "count": 3,
+      "alignn_self_trained_MAE_eV": 0.046535696625709534,
       "alignn_pretrained_MAE_eV": null,
       "random_forest_MAE_eV": 0.06554383280857735,
       "ridge_MAE_eV": 0.19897067284554681
