@@ -1,4 +1,4 @@
-# Predicting Band Gaps of Two-Dimensional Materials with ALIGNN
+<img width="57" height="34" alt="image" src="https://github.com/user-attachments/assets/ab067ffd-e09b-4162-a29e-15b86076c740" /><img width="496" height="35" alt="image" src="https://github.com/user-attachments/assets/1d679fd2-e3a1-48cd-9142-d227bb85ac76" /># Predicting Band Gaps of Two-Dimensional Materials with ALIGNN
 
 INFO5000 course project for predicting band gaps of two-dimensional materials from crystal structures using graph neural networks and classical machine-learning baselines.
 
@@ -10,9 +10,9 @@ The intended deep-learning model is ALIGNN (Atomistic Line Graph Neural Network)
 
 ## Project Context
 
-- Course: INFO5000 - Introduction to Data Science, HKUST(GZ)
-- Student: Xiaoyu Wang
-- Research area: Advanced Materials
+- Course: INFO5000 - HKUST(GZ)
+- Student: Junjie LEI, Cheng ZHANG, Haitao YU, Hongyu Zhan, Jiayi HUANG
+- Research area: AI4Science
 - Main task: Band gap regression for 2D materials
 - Data source: JARVIS-DFT
 - Primary model target: ALIGNN
@@ -26,7 +26,7 @@ The completed reproducible baseline pipeline uses 75,993 valid JARVIS material r
 | --- | ---: | ---: | ---: |
 | Random Forest + Magpie | 0.273 | 0.611 | 0.798 |
 | Ridge + Magpie | 0.689 | 1.034 | 0.421 |
-| ALIGNN self-trained | N/A | N/A | N/A |
+| ALIGNN self-trained | 0.115 | 0.380 | 0.922 |
 
 ALIGNN self-training was attempted on a remote GPU, but the run was blocked by DGL/PyTorch/CUDA compatibility issues in the available AutoDL image. The repository keeps the direct ALIGNN training implementation so it can be rerun when a matching PyTorch, CUDA, and DGL environment is available.
 
