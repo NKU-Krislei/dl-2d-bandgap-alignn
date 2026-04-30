@@ -1,4 +1,4 @@
-<img width="57" height="34" alt="image" src="https://github.com/user-attachments/assets/ab067ffd-e09b-4162-a29e-15b86076c740" /><img width="496" height="35" alt="image" src="https://github.com/user-attachments/assets/1d679fd2-e3a1-48cd-9142-d227bb85ac76" /># Predicting Band Gaps of Two-Dimensional Materials with ALIGNN
+# Predicting Band Gaps of Two-Dimensional Materials with ALIGNN
 
 INFO5000 course project for predicting band gaps of two-dimensional materials from crystal structures using graph neural networks and classical machine-learning baselines.
 
